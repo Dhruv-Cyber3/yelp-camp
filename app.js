@@ -31,11 +31,24 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+// const validateCampground = (req, res, next) => {
+//     const { error } = campgroundSchema.validate(req.body);
+//     const msg = error.details.map(el => el.message).join(',')
+//     if (error) {
+//         throw new expressError(msg, 400)
+//     }
+//     else {
+//         next();
+//     }
+// }
+
+
+
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body);
-    const msg = error.details.map(el => el.message).join(',')
     if (error) {
-        throw new expressError(msg, 400)
+        const msg = error.details.map(el => el.message).join(',');
+        throw new expressError(msg, 400);
     }
     else {
         next();
@@ -44,60 +57,95 @@ const validateCampground = (req, res, next) => {
 
 
 
+
+//GET REQUEST FOR HOME PAGE
+
 app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/campgrounds', catchAsync(async (req, res) => {
+
+
+//GET REQUEST TO SHOW ALL CAMPGROUNDS
+
+app.get('/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds });
-}));
+});
+
+
+
+//GET REQUEST TO RENDER NEW.EJS 
 
 app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new');
 });
 
+
+//POST REQUEST FOR ADDING A CAMPGROUND
+
 app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
-    // if (!req.body.campground) throw new expressError('Invalid Data', 400);
+    // if (!req.body.campground) throw new expressError('Invalid campground Data', 400);
 
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
-}))
+
+}));
+
+
+
+//GET REQUEST FOR VIEWING CAMPGROUND USING ID
 
 app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.render('campgrounds/show', { campground });
 }));
 
-app.get('/campgrounds/:id/edit', validateCampground, catchAsync(async (req, res) => {
+
+
+//GET REQUEST FOR RENDERING EDIT.EJS 
+
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.render('campgrounds/edit', { campground });
-}))
+}));
 
-app.put('/campgrounds/:id', catchAsync(async (req, res) => {
+
+
+//PUT REQUEST FOR CAMPGROUND ID
+
+app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     res.redirect(`/campgrounds/${campground._id}`);
-}))
+}));
+
+
+//DELETE REQUEST FOR DELETING CAMPGROUND
 
 app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
-}))
+}));
 
-// app.all('*', (req, res, next) => {
-//     next(new expressError('Page not found', 404))
-// })
+app.all('*', (req, res, next) => {
+    next(new expressError('Page not found', 404))
+})
 
-// app.use((err, req, res, next) => {
-//     const { statusCode = 500 } = err;
-//     if (!err.message) err.message = "Something went wrong"
-//     res.status(statusCode).render('error', { err });
-//     res.send("error in ");
-// })
+app.use((err, req, res, next) => {
+    // const { statusCode = 500 } = err;
+    // if (!err.message) err.message = "Something went wrong"
+    // res.status(statusCode).render('error', { err });
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'something went wrong';
+    res.status(statusCode).render('error', { err });
+})
 
+
+
+//LISTENING 
 
 app.listen(3000, () => {
     console.log('listening on 3000');
