@@ -12,47 +12,47 @@
     <link rel="stylesheet" href="/stylesheets/home.css">
 </head>
 
-<body class="d-flex  text-center text-white bg-dark">
-
+<body class="d-flex  text-center text-white bg-dark ">
 
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <%- include('./partials/flash') %>
 
-
-        <nav class="navbar navbar-expand-lg navbar-dark  mb-5">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">YelpCamp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavAltMarkup">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link active" href="#">Home</a>
-                        <a class="nav-link" href="/campgrounds">Campgrounds</a>
-                        <% if(!currentUser) {%>
-                            <a class="nav-link" href="/login">Login</a>
-                            <a class="nav-link" href="/register">Register</a>
-                            <% } else {%>
-                                <a href="/logout" class="nav-link">Logout</a>
-                                <% } %>
+            <nav class="navbar navbar-expand-lg navbar-dark  mb-5">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">YelpCamp</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" href="#">Home</a>
+                            <a class="nav-link" href="/campgrounds">Campgrounds</a>
+                            <% if(!currentUser) {%>
+                                <a class="nav-link" href="/login">Login</a>
+                                <a class="nav-link" href="/register">Register</a>
+                                <% } else {%>
+                                    <a href="/logout" class="nav-link">Logout</a>
+                                    <% } %>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
 
-        <main class="mt-5 px-3">
-            <h1>YelpCamp</h1>
-            <p class="lead">Welcome to YelpCamp! <br> Jump right in and explore our many campgrounds. <br>
-                Feel free to share some of your own and comment on others!
-            </p>
-            <a href="/campgrounds" class="btn btn-lg btn-secondary font-weight-bold bg-white">View
-                Campgrounds</a>
-        </main>
 
-        <footer class="mt-auto text-white-50">
-            <p>&copy; 2021 YelpCamp</p>
-        </footer>
+            <main class="mt-5 px-3">
+                <h1>YelpCamp</h1>
+                <p class="lead">Welcome to YelpCamp! <br> Jump right in and explore our many campgrounds. <br>
+                    Feel free to share some of your own and comment on others!
+                </p>
+                <a href="/campgrounds" class="btn btn-lg btn-secondary font-weight-bold bg-white">View
+                    Campgrounds</a>
+            </main>
+
+            <footer class="mt-auto text-white-50">
+                <p>&copy; 2021 YelpCamp</p>
+            </footer>
 
     </div>
 
